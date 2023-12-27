@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul>
+                    <li><a href="{% url "beranda" %}">Beranda</a></li>
+                    <li class="active">Produk {{categories.nama}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Li's Breadcrumb Area End Here -->
+    <!-- Begin Li's Content Wraper Area -->
+    <div class="content-wraper pt-60 pb-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop-top-bar mt-30">
+                        <div class="shop-bar-inner">
+                            <div class="product-view-mode">
+                                <!-- shop-item-filter-list start -->
+                                <ul class="nav shop-item-filter-list" role="tablist">
+                                    <li class="active" role="presentation"><a aria-selected="true" class="active show" data-toggle="tab" role="tab" aria-controls="grid-view" href="#grid-view"><i class="fa fa-th"></i></a></li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="list-view" href="#list-view"><i class="fa fa-th-list"></i></a></li>
+                                </ul>
+                                <!-- shop-item-filter-list end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- shop-top-bar end -->
+                    <!-- shop-products-wrapper start -->
+                    <div class="shop-products-wrapper">
+                        <div class="tab-content">
+                            <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
+                                <div class="product-area shop-product-area">
+                                    <div class="row">
+                                        {% for pk in detailkategori %}
+                                        <div class="col-lg-3 col-md-4 col-sm-6 mt-40">
+                                            <!-- single-product-wrap start -->
+                                            <div class="single-product-wrap">
+                                                <div class="product-image">
+                                                    <a href="{% url "produk" pk.kategori.slug pk.slug %}">
+                                                        <img src="{{pk.gambar.url}}" alt="{{pk.nama_produk}}">
+                                                    </a>
+                                                    {% if pk.keterangan_barang == "Baru" %}
+                                                    <span class="sticker">Baru</span>
+                                                    {% elif pk.keterangan_barang == "Lama" %}
+                                                    <span class="sticker">Lama</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="product_desc">
+                                                    <div class="product_desc_info">
+                                                        <h4><a class="product_name" href="{% url "produk" pk.kategori.slug pk.slug %}">{{pk.nama_produk}}</a></h4>
+                                                        <div class="price-box">
+                                                            {% if pk.diskon == 0 %}
+                                                            <span class="new-price new-price-2">Rp. {{pk.harga|intcomma}}</span>
+                                                            {% else %}
+                                                            <span class="new-price new-price-2">Rp. {{pk.setelah_diskon|intcomma}}</span>
+                                                            <span class="old-price">Rp. {{pk.harga|intcomma}}</span>
+                                                            <span class="discount-percentage">{{pk.diskon}}%</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="add-actions">
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="{% url "produk" pk.kategori.slug pk.slug %}">Detail Barang</a></li>
+                                                            <li><a href="#"title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter{{pk.id}}"><i class="fa fa-eye"></i></a></li>
+                                                            <li><a class="links-details"href="https://api.whatsapp.com/send?phone={{pk.no_whatsup}}&text=Saya%20ingin%20pemesan%20product%20{{pk.nama_produk}}%20apakah%20tersedia%20?%20"target="_blank"><i class="fa fa-whatsapp"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- single-product-wrap end -->
+                                        </div>
+                                        {% empty %}
+                                        <div class="col-lg-3 col-md-4 col-sm-6 mt-40">
+                                            <div class="alert alert-danger">Kategori {{categories.nama}} Kosong</div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="list-view" class="tab-pane product-list-view fade" role="tabpanel">
+                                <div class="row">
+                                    <div class="col">
+                                        {% for pk in detailkategori %}
+                                        <div class="row product-layout-list last-child">
+                                            <div class="col-lg-3 col-md-5 ">
+                                                <div class="product-image">
+                                                    <a href="{% url "produk" pk.kategori.slug pk.slug %}">
+                                                        <img src="{{pk.gambar.url}}" alt="{{pk.nama_produk}}">
+                                                    </a>
+                                                    {% if pk.keterangan_barang == "Baru" %}
+                                                    <span class="sticker">Baru</span>
+                                                    {% elif pk.keterangan_barang == "Lama" %}
+                                                    <span class="sticker">Lama</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-5 col-md-7">
+                                                <div class="product_desc">
+                                                    <div class="product_desc_info">
+                                                        <h4><a class="product_name" href="{% url "produk" pk.kategori.slug pk.slug %}">{{pk.nama_produk}}</a></h4>
+                                                        <div class="price-box">
+                                                            {% if pk.diskon == 0 %}
+                                                            <span class="new-price new-price-2">Rp. {{pk.harga|intcomma}}</span>
+                                                            {% else %}
+                                                            <span class="new-price new-price-2">Rp. {{pk.setelah_diskon|intcomma}}</span>
+                                                            <span class="old-price">Rp. {{pk.harga|intcomma}}</span>
+                                                            <span class="discount-percentage">{{pk.diskon}}%</span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <p>{{ pk.keterangan|truncatewords:15|safe }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="shop-add-action">
+                                                    <ul class="add-actions-link">
+                                                        <li class="add-cart"><a href="{% url "produk" pk.kategori.slug pk.slug %}">Detail Barang</a></li>
+                                                        <li class="wishlist"><a href="https://api.whatsapp.com/send?phone={{pr.no_whatsup}}&text=Saya%20ingin%20pemesan%20product%20{{pr.nama_produk}}%20apakah%20tersedia%20?%20"target="_blank"><i class="fa fa-whatsapp"></i>Beli Lewat Whatsapp</a></li>
+                                                        <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter{{pr.id}}" href="#"><i class="fa fa-eye"></i>View</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <div class="row product-layout-list last-child">
+                                            <div class="alert alert-danger">Kategori {{categories.nama}} Kosong</div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="paginatoin-area">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <p>Showing 1-12 of 13 item(s)</p>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <ul class="pagination-box">
+                                            <li><a href="#" class="Previous"><i class="fa fa-chevron-left"></i> Previous</a>
+                                            </li>
+                                            <li class="active"><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li>
+                                              <a href="#" class="Next"> Next <i class="fa fa-chevron-right"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- shop-products-wrapper end -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
